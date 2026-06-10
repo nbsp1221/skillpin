@@ -1,18 +1,18 @@
 ---
-name: skillrouter
-description: Use when an AI agent should route a task through trusted local Agent Skills managed by Skillrouter before doing specialized work.
+name: skillcase
+description: Use when an AI agent should route a task through trusted local Agent Skills managed by skillcase before doing specialized work.
 ---
-# Skillrouter
+# skillcase
 
-Before doing specialized work, search the trusted local Skillrouter library:
+Before doing specialized work, search the trusted local skillcase library:
 
 ```bash
-skillrouter search "<task>" --json
+skillcase search "<task>" --json
 ```
 
 Use the user's request as `<task>`. Prefer JSON output so the result can be parsed reliably.
 
-If the user explicitly asks to use Skillrouter, search is mandatory.
+If the user explicitly asks to use skillcase, search is mandatory.
 
 Compare the top matches by `name`, `description`, `score`, and `why_matched`. Select a skill only when the match clearly applies to the current task.
 

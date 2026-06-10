@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 
 import { auditParsedSkill, type SkillWarning } from "./audit.js";
 import { discoverSkillFiles } from "./discovery.js";
-import { resolveSkillrouterPaths, type ResolvePathsOptions } from "./paths.js";
+import { resolveSkillcasePaths, type ResolvePathsOptions } from "./paths.js";
 import { parseSkillDocument, type ParsedSkill } from "./skill.js";
 import { findSymlinks } from "./symlinks.js";
 
@@ -52,7 +52,7 @@ interface CandidateSkill {
 }
 
 export async function addSkillsToLibrary(candidatePath: string, options: AddSkillsOptions = {}): Promise<AddResult> {
-  const paths = resolveSkillrouterPaths(options);
+  const paths = resolveSkillcasePaths(options);
   const replace = options.replace === true;
   const now = options.now ?? (() => new Date());
   const skillFiles = await discoverSkillFiles(candidatePath);
@@ -221,7 +221,7 @@ async function writeImportSidecar(
   warningsAtImport: readonly SkillWarning[],
 ): Promise<void> {
   await writeFile(
-    join(stagedDir, ".skillrouter.json"),
+    join(stagedDir, ".skillcase.json"),
     `${JSON.stringify(
       {
         imported_at: importedAt.toISOString(),

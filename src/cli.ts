@@ -12,13 +12,13 @@ export function createProgram(): Command {
   const program = new Command();
 
   program
-    .name("skillrouter")
-    .description("Local trusted Agent Skill router for LLM agents")
+    .name("skillcase")
+    .description("Local trusted Agent Skill library for LLM agents")
     .version(packageJson.version);
 
   program
     .command("init")
-    .description("Initialize the local Skillrouter managed library")
+    .description("Initialize the local skillcase managed library")
     .option("--json", "Print stable JSON output")
     .action(async (options) => {
       const result = await initializeLibrary();

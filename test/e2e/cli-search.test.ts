@@ -2,15 +2,15 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { buildCli, cleanupCliHome, makeCliHome, runSkillrouter } from "./cli-helpers.js";
+import { buildCli, cleanupCliHome, makeCliHome, runSkillcase } from "./cli-helpers.js";
 
 const homes: string[] = [];
 
 async function makeInitializedHome(): Promise<string> {
-  const home = makeCliHome("skillrouter-cli-search");
+  const home = makeCliHome("skillcase-cli-search");
   homes.push(home);
-  const init = await runSkillrouter(["init", "--json"], home);
-  const add = await runSkillrouter(["add", "test/fixtures/skills/search-library", "--json"], home);
+  const init = await runSkillcase(["init", "--json"], home);
+  const add = await runSkillcase(["add", "test/fixtures/skills/search-library", "--json"], home);
   expect(init.exitCode).toBe(0);
   expect(add.exitCode).toBe(0);
   return home;
@@ -24,11 +24,11 @@ afterEach(async () => {
   await Promise.all(homes.splice(0).map((home) => cleanupCliHome(home)));
 });
 
-describe("skillrouter CLI search", () => {
+describe("skillcase CLI search", () => {
   it("search json returns managed path and why_matched", async () => {
     const home = await makeInitializedHome();
 
-    const result = await runSkillrouter(["search", "react rerender performance", "--json"], home);
+    const result = await runSkillcase(["search", "react rerender performance", "--json"], home);
     const json = JSON.parse(result.stdout);
 
     expect(result.exitCode).toBe(0);
@@ -48,7 +48,7 @@ describe("skillrouter CLI search", () => {
   it("managed_path points to SKILL.md file", async () => {
     const home = await makeInitializedHome();
 
-    const result = await runSkillrouter(["search", "python refactor", "--json"], home);
+    const result = await runSkillcase(["search", "python refactor", "--json"], home);
     const json = JSON.parse(result.stdout);
     const managedPath = json.matches[0].managed_path;
 
@@ -59,7 +59,7 @@ describe("skillrouter CLI search", () => {
   it("search output omits source_path read_command and body", async () => {
     const home = await makeInitializedHome();
 
-    const result = await runSkillrouter(["search", "react performance", "--json"], home);
+    const result = await runSkillcase(["search", "react performance", "--json"], home);
     const json = JSON.parse(result.stdout);
     const match = json.matches[0];
 
@@ -84,7 +84,7 @@ describe("skillrouter CLI search", () => {
       ].join("\n"),
     );
 
-    const result = await runSkillrouter(["search", "database migration", "--json"], home);
+    const result = await runSkillcase(["search", "database migration", "--json"], home);
     const json = JSON.parse(result.stdout);
 
     expect(json.matches[0]).toMatchObject({
@@ -96,7 +96,7 @@ describe("skillrouter CLI search", () => {
   it("searches managed skill body text without returning body", async () => {
     const home = await makeInitializedHome();
 
-    const result = await runSkillrouter(["search", "cleanup extraction", "--json"], home);
+    const result = await runSkillcase(["search", "cleanup extraction", "--json"], home);
     const json = JSON.parse(result.stdout);
 
     expect(result.exitCode).toBe(0);

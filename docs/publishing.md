@@ -1,6 +1,6 @@
 # Publishing
 
-Skillrouter is published through GitHub Actions and npm Trusted Publishing.
+skillcase is published through GitHub Actions and npm Trusted Publishing.
 
 The repository does not store an npm publish token. Publishing should happen from GitHub-hosted runners using OIDC.
 
@@ -24,7 +24,7 @@ After the package exists on npm, configure Trusted Publishing for the package:
 ```txt
 Provider: GitHub Actions
 Organization or user: nbsp1221
-Repository: skillrouter
+Repository: skillcase
 Workflow filename: publish.yml
 Environment name: <leave blank>
 Allowed action: npm publish

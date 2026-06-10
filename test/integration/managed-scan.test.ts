@@ -9,7 +9,7 @@ import { scanManagedLibrary } from "../../src/core/managed.js";
 const tempRoots: string[] = [];
 
 async function makeTempHome(): Promise<string> {
-  const home = join(tmpdir(), `skillrouter-managed-${randomUUID()}`);
+  const home = join(tmpdir(), `skillcase-managed-${randomUUID()}`);
   tempRoots.push(home);
   await mkdir(join(home, "skills"), { recursive: true });
   return home;
@@ -34,7 +34,7 @@ describe("managed library scan", () => {
     await writeManagedSkill(home, "react-performance-review", "Original description.");
 
     await writeManagedSkill(home, "react-performance-review", "Edited description.");
-    const result = await scanManagedLibrary({ env: { SKILLROUTER_HOME: home }, homeDir: "/unused" });
+    const result = await scanManagedLibrary({ env: { SKILLCASE_HOME: home }, homeDir: "/unused" });
 
     expect(result.skills).toEqual([
       {
@@ -52,7 +52,7 @@ describe("managed library scan", () => {
     await mkdir(join(home, "skills", "broken-skill"), { recursive: true });
     await writeFile(join(home, "skills", "broken-skill", "SKILL.md"), "not frontmatter");
 
-    const result = await scanManagedLibrary({ env: { SKILLROUTER_HOME: home }, homeDir: "/unused" });
+    const result = await scanManagedLibrary({ env: { SKILLCASE_HOME: home }, homeDir: "/unused" });
 
     expect(result.skills.map((skill) => skill.name)).toEqual(["valid-skill"]);
     expect(result.invalid).toHaveLength(1);

@@ -19,11 +19,11 @@ The 100-skill corpus flow is evidence-only. It validates search usefulness again
 Use `/tmp` for the corpus and home:
 
 ```bash
-export SKILLROUTER_HOME="$(mktemp -d /tmp/skillrouter-home.XXXXXX)"
-export SKILLROUTER_CORPUS="/tmp/skillrouter-corpus"
+export SKILLCASE_HOME="$(mktemp -d /tmp/skillcase-home.XXXXXX)"
+export SKILLCASE_CORPUS="/tmp/skillcase-corpus"
 pnpm build
 node dist/cli.js init --json
-node dist/cli.js add "$SKILLROUTER_CORPUS" --json
+node dist/cli.js add "$SKILLCASE_CORPUS" --json
 node dist/cli.js status --json
 node dist/cli.js search "react performance review" --json
 ```

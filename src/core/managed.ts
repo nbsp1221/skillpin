@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import * as z from "zod";
 
-import { resolveSkillrouterPaths, type ResolvePathsOptions } from "./paths.js";
+import { resolveSkillcasePaths, type ResolvePathsOptions } from "./paths.js";
 import { parseSkillDocument } from "./skill.js";
 
 const SidecarSchema = z
@@ -44,7 +44,7 @@ export interface ManagedScanResult {
 }
 
 export async function scanManagedLibrary(options: ResolvePathsOptions = {}): Promise<ManagedScanResult> {
-  const paths = resolveSkillrouterPaths(options);
+  const paths = resolveSkillcasePaths(options);
   const entries = await readManagedSkillDirectories(paths.skillsDir);
   const skills: ManagedSkill[] = [];
   const invalid: InvalidManagedSkill[] = [];
@@ -58,7 +58,7 @@ export async function scanManagedLibrary(options: ResolvePathsOptions = {}): Pro
         name: skill.name,
         description: skill.description,
         managed_path: skillFile,
-        warnings_at_import: await readWarningsAtImport(join(paths.skillsDir, entry, ".skillrouter.json")),
+        warnings_at_import: await readWarningsAtImport(join(paths.skillsDir, entry, ".skillcase.json")),
       });
     } catch (error: unknown) {
       invalid.push({

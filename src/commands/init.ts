@@ -1,6 +1,6 @@
 import { mkdir, stat } from "node:fs/promises";
 
-import { resolveSkillrouterPaths, type ResolvePathsOptions } from "../core/paths.js";
+import { resolveSkillcasePaths, type ResolvePathsOptions } from "../core/paths.js";
 
 export interface InitResult {
   readonly ok: true;
@@ -23,7 +23,7 @@ async function directoryExists(path: string): Promise<boolean> {
 }
 
 export async function initializeLibrary(options: ResolvePathsOptions = {}): Promise<InitResult> {
-  const paths = resolveSkillrouterPaths(options);
+  const paths = resolveSkillcasePaths(options);
   const existed = await directoryExists(paths.skillsDir);
 
   await mkdir(paths.skillsDir, { recursive: true });
@@ -43,5 +43,5 @@ export function printInitResult(result: InitResult, asJson: boolean): void {
     return;
   }
 
-  process.stdout.write(`Skillrouter initialized at ${result.home}\n`);
+  process.stdout.write(`skillcase initialized at ${result.home}\n`);
 }

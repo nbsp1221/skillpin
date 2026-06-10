@@ -13,30 +13,30 @@ describe("router skill template", () => {
   it("router skill has required frontmatter", async () => {
     const skill = parseSkillDocument(await readRouterSkill());
 
-    expect(skill.name).toBe("skillrouter");
+    expect(skill.name).toBe("skillcase");
     expect(skill.description).toContain("trusted local Agent Skills");
   });
 
   it("router skill requires search before specialized work", async () => {
     const source = await readRouterSkill();
 
-    expect(source).toContain('skillrouter search "<task>" --json');
+    expect(source).toContain('skillcase search "<task>" --json');
     expect(source).toContain("managed_path");
     expect(source).toContain("Compare the top matches");
     expect(source).toContain("If no match is strong enough");
   });
 
-  it("router skill makes search mandatory when Skillrouter is explicitly requested", async () => {
+  it("router skill makes search mandatory when skillcase is explicitly requested", async () => {
     const source = await readRouterSkill();
 
-    expect(source).toContain("If the user explicitly asks to use Skillrouter");
+    expect(source).toContain("If the user explicitly asks to use skillcase");
     expect(source).toContain("search is mandatory");
   });
 
   it("router skill does not mention unsupported read/install/fetch behavior", async () => {
     const source = await readRouterSkill();
     const forbiddenPhrases = [
-      `skillrouter ${"read"}`,
+      `skillcase ${"read"}`,
       `install${"-router"}`,
       `git ${"clone"}`,
       `npx ${"skills"}`,

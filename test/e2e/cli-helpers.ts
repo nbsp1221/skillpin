@@ -32,8 +32,8 @@ export async function buildCli(): Promise<void> {
   }
 }
 
-export function runSkillrouter(args: readonly string[], home: string): Promise<CliRunResult> {
-  return runProcess("node", ["dist/cli.js", ...args], { SKILLROUTER_HOME: home });
+export function runSkillcase(args: readonly string[], home: string): Promise<CliRunResult> {
+  return runProcess("node", ["dist/cli.js", ...args], { SKILLCASE_HOME: home });
 }
 
 function runProcess(command: string, args: readonly string[], env: Readonly<Record<string, string>>): Promise<CliRunResult> {

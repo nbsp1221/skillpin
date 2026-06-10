@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { buildCli, cleanupCliHome, makeCliHome, runSkillrouter } from "./cli-helpers.js";
+import { buildCli, cleanupCliHome, makeCliHome, runSkillcase } from "./cli-helpers.js";
 
-const home = makeCliHome("skillrouter-cli-roundtrip");
+const home = makeCliHome("skillcase-cli-roundtrip");
 
 beforeAll(async () => {
   await buildCli();
@@ -12,12 +12,12 @@ afterAll(async () => {
   await cleanupCliHome(home);
 });
 
-describe("skillrouter CLI init add list status", () => {
+describe("skillcase CLI init add list status", () => {
   it("init add list status JSON round trip", async () => {
-    const init = await runSkillrouter(["init", "--json"], home);
-    const add = await runSkillrouter(["add", "test/fixtures/skills/react-performance-review", "--json"], home);
-    const list = await runSkillrouter(["list", "--json"], home);
-    const status = await runSkillrouter(["status", "--json"], home);
+    const init = await runSkillcase(["init", "--json"], home);
+    const add = await runSkillcase(["add", "test/fixtures/skills/react-performance-review", "--json"], home);
+    const list = await runSkillcase(["list", "--json"], home);
+    const status = await runSkillcase(["status", "--json"], home);
 
     expect(init.exitCode).toBe(0);
     expect(add.exitCode).toBe(0);

@@ -9,7 +9,7 @@ import { discoverSkillFiles } from "../../src/core/discovery.js";
 const tempRoots: string[] = [];
 
 async function makeTempRoot(): Promise<string> {
-  const root = join(tmpdir(), `skillrouter-discovery-${randomUUID()}`);
+  const root = join(tmpdir(), `skillcase-discovery-${randomUUID()}`);
   tempRoots.push(root);
   await mkdir(root, { recursive: true });
   return root;

@@ -1,7 +1,7 @@
 {
-  "name": "skillrouter",
+  "name": "skillcase",
   "version": "0.0.1",
-  "description": "Local trusted Agent Skill router for LLM agents",
+  "description": "Local trusted Agent Skill library for LLM agents",
   "keywords": [
     "agent-skills",
     "codex",
@@ -9,18 +9,18 @@
     "llm",
     "skills"
   ],
-  "homepage": "https://github.com/nbsp1221/skillrouter#readme",
+  "homepage": "https://github.com/nbsp1221/skillcase#readme",
   "bugs": {
-    "url": "https://github.com/nbsp1221/skillrouter/issues"
+    "url": "https://github.com/nbsp1221/skillcase/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nbsp1221/skillrouter.git"
+    "url": "git+https://github.com/nbsp1221/skillcase.git"
   },
   "license": "MIT",
   "type": "module",
   "bin": {
-    "skillrouter": "dist/cli.js"
+    "skillcase": "dist/cli.js"
   },
   "files": [
     "dist/cli.js",
@@ -29,7 +29,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsx src/cli.ts",
-    "skillrouter": "node dist/cli.js",
+    "skillcase": "node dist/cli.js",
     "test": "pnpm build && vitest run",
     "test:e2e": "pnpm build && vitest run test/e2e",
     "test:integration": "vitest run test/integration",
