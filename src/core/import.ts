@@ -6,8 +6,14 @@ import { auditParsedSkill, type SkillWarning } from "./audit.js";
 import { discoverSkillFiles } from "./discovery.js";
 import { resolveSkillrouterPaths, type ResolvePathsOptions } from "./paths.js";
 import { parseSkillDocument, type ParsedSkill } from "./skill.js";
+import { findSymlinks } from "./symlinks.js";
 
-export type AddErrorCode = "invalid-skill" | "duplicate-name" | "existing-name" | "no-skills-found";
+export type AddErrorCode =
+  | "invalid-skill"
+  | "duplicate-name"
+  | "existing-name"
+  | "no-skills-found"
+  | "symlink-not-supported";
 
 export interface AddError {
   readonly code: AddErrorCode;
@@ -91,6 +97,17 @@ export async function addSkillsToLibrary(candidatePath: string, options: AddSkil
         code: "invalid-skill",
         message: error instanceof Error ? error.message : "Unknown skill parsing error.",
         paths: [skillFile],
+      });
+    }
+  }
+
+  for (const candidate of candidates) {
+    const symlinks = await findSymlinks(candidate.candidateDir);
+    if (symlinks.length > 0) {
+      errors.push({
+        code: "symlink-not-supported",
+        message: `Skill directory contains symlinks: ${candidate.parsed.name}`,
+        paths: symlinks,
       });
     }
   }

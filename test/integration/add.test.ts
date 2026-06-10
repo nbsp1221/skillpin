@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, stat, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -177,5 +177,30 @@ describe("add skills to managed library", () => {
     });
 
     expect(await pathExists(join(dirname(join(home, "skills", "same-skill", "SKILL.md")), "references", "old.md"))).toBe(false);
+  });
+
+  it("rejects skills with symlinked bundled files", async () => {
+    const home = await makeTempRoot("skillrouter-add-home");
+    const sourceRoot = await makeTempRoot("skillrouter-add-source");
+    const externalRoot = await makeTempRoot("skillrouter-external-source");
+    const skillDir = await writeCandidateSkill(
+      sourceRoot,
+      "skill",
+      "symlink-skill",
+      "Skill containing a symlinked bundle entry.",
+    );
+    await mkdir(join(skillDir, "references"), { recursive: true });
+    await writeFile(join(externalRoot, "outside.md"), "outside");
+    await symlink(join(externalRoot, "outside.md"), join(skillDir, "references", "outside.md"));
+
+    const result = await addSkillsToLibrary(skillDir, {
+      env: { SKILLROUTER_HOME: home },
+      homeDir: "/unused",
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.imported).toBe(0);
+    expect(result.errors.map((error) => error.code)).toEqual(["symlink-not-supported"]);
+    await expect(readdir(join(home, "skills"))).resolves.toEqual([]);
   });
 });

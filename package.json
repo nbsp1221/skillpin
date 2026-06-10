@@ -4,6 +4,10 @@
   "private": true,
   "description": "Local trusted Agent Skill router for LLM agents",
   "type": "module",
+  "files": [
+    "dist/cli.js",
+    "router-skill/SKILL.md"
+  ],
   "bin": {
     "skillrouter": "./dist/cli.js"
   },
@@ -11,9 +15,11 @@
     "build": "tsup",
     "dev": "tsx src/cli.ts",
     "skillrouter": "node dist/cli.js",
-    "test": "vitest run",
-    "test:e2e": "vitest run test/e2e",
+    "test": "pnpm build && vitest run",
+    "test:e2e": "pnpm build && vitest run test/e2e",
     "test:integration": "vitest run test/integration",
+    "test:package": "pnpm build && node scripts/check-package.mjs",
+    "test:release": "pnpm typecheck && pnpm test && pnpm test:e2e && pnpm test:package && node dist/cli.js --version",
     "test:unit": "vitest run test/unit",
     "typecheck": "tsc --noEmit"
   },

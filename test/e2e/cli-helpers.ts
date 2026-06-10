@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { rm } from "node:fs/promises";
+import { readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -19,14 +19,21 @@ export async function cleanupCliHome(home: string): Promise<void> {
 }
 
 export async function buildCli(): Promise<void> {
-  const result = await runProcess("pnpm", ["typecheck"], {});
-  if (result.exitCode !== 0) {
-    throw new Error(`Build failed:\n${result.stdout}\n${result.stderr}`);
+  try {
+    const artifact = await readFile("dist/cli.js", "utf8");
+    if (!artifact.startsWith("#!/usr/bin/env node")) {
+      throw new Error("Built CLI artifact is missing the node shebang.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Built CLI artifact is unavailable. Run pnpm build before e2e tests.\n${error.message}`);
+    }
+    throw error;
   }
 }
 
 export function runSkillrouter(args: readonly string[], home: string): Promise<CliRunResult> {
-  return runProcess("pnpm", ["exec", "tsx", "src/cli.ts", ...args], { SKILLROUTER_HOME: home });
+  return runProcess("node", ["dist/cli.js", ...args], { SKILLROUTER_HOME: home });
 }
 
 function runProcess(command: string, args: readonly string[], env: Readonly<Record<string, string>>): Promise<CliRunResult> {

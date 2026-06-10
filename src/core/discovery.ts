@@ -1,4 +1,4 @@
-import { stat } from "node:fs/promises";
+import { lstat } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { glob } from "tinyglobby";
 
@@ -33,12 +33,13 @@ export async function discoverSkillFiles(candidatePath: string): Promise<readonl
     onlyFiles: true,
   });
 
-  return files.sort();
+  const regularFiles = await Promise.all(files.map(async (file) => ((await isFile(file)) ? file : null)));
+  return regularFiles.filter((file) => file !== null).sort();
 }
 
 async function isFile(path: string): Promise<boolean> {
   try {
-    const stats = await stat(path);
+    const stats = await lstat(path);
     return stats.isFile();
   } catch (error: unknown) {
     if (hasFileSystemCode(error, "ENOENT")) {

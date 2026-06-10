@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -47,5 +47,17 @@ describe("skill discovery", () => {
     const files = await discoverSkillFiles(root);
 
     expect(files).toEqual([join(root, "skills", "react-performance-review", "SKILL.md")]);
+  });
+
+  it("ignores symlinked SKILL.md files", async () => {
+    const root = await makeTempRoot();
+    const external = await makeTempRoot();
+    await writeSkill(external, "external-skill");
+    await mkdir(join(root, "linked-skill"), { recursive: true });
+    await symlink(join(external, "SKILL.md"), join(root, "linked-skill", "SKILL.md"));
+
+    const files = await discoverSkillFiles(root);
+
+    expect(files).toEqual([]);
   });
 });
