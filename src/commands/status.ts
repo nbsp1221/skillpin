@@ -1,7 +1,7 @@
 import { stat } from "node:fs/promises";
 
 import { scanManagedLibrary } from "../core/managed.js";
-import { resolveSkillcasePaths, type ResolvePathsOptions } from "../core/paths.js";
+import { resolveSkillpinPaths, type ResolvePathsOptions } from "../core/paths.js";
 
 export interface StatusResult {
   readonly ok: true;
@@ -14,7 +14,7 @@ export interface StatusResult {
 }
 
 export async function statusCommand(options: ResolvePathsOptions = {}): Promise<StatusResult> {
-  const paths = resolveSkillcasePaths(options);
+  const paths = resolveSkillpinPaths(options);
   const initialized = await directoryExists(paths.skillsDir);
   const scan = await scanManagedLibrary(options);
 

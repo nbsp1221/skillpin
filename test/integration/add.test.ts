@@ -49,11 +49,11 @@ afterEach(async () => {
 
 describe("add skills to managed library", () => {
   it("fails when no skill files are discovered", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const sourceRoot = await makeTempRoot("skillcase-empty-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const sourceRoot = await makeTempRoot("skillpin-empty-source");
 
     const result = await addSkillsToLibrary(join(sourceRoot, "missing"), {
-      env: { SKILLCASE_HOME: home },
+      env: { SKILLPIN_HOME: home },
       homeDir: "/unused",
     });
 
@@ -63,8 +63,8 @@ describe("add skills to managed library", () => {
   });
 
   it("imports single skill directory with bundled assets", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const sourceRoot = await makeTempRoot("skillcase-add-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const sourceRoot = await makeTempRoot("skillpin-add-source");
     const skillDir = await writeCandidateSkill(
       sourceRoot,
       "react-performance-review",
@@ -74,7 +74,7 @@ describe("add skills to managed library", () => {
     await mkdir(join(skillDir, "references"), { recursive: true });
     await writeFile(join(skillDir, "references", "checklist.md"), "Check prop identity.");
 
-    const result = await addSkillsToLibrary(skillDir, { env: { SKILLCASE_HOME: home }, homeDir: "/unused" });
+    const result = await addSkillsToLibrary(skillDir, { env: { SKILLPIN_HOME: home }, homeDir: "/unused" });
 
     expect(result.ok).toBe(true);
     expect(result.imported).toBe(1);
@@ -88,19 +88,19 @@ describe("add skills to managed library", () => {
     await expect(readFile(join(home, "skills", "react-performance-review", "references", "checklist.md"), "utf8")).resolves.toBe(
       "Check prop identity.",
     );
-    const sidecar = JSON.parse(await readFile(join(home, "skills", "react-performance-review", ".skillcase.json"), "utf8"));
+    const sidecar = JSON.parse(await readFile(join(home, "skills", "react-performance-review", ".skillpin.json"), "utf8"));
     expect(sidecar).toMatchObject({ warnings_at_import: [] });
     expect(typeof sidecar.imported_at).toBe("string");
   });
 
   it("imports recursive library atomically", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const sourceRoot = await makeTempRoot("skillcase-add-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const sourceRoot = await makeTempRoot("skillpin-add-source");
     await writeCandidateSkill(sourceRoot, "library/a", "a-skill", "A skill.");
     await writeCandidateSkill(sourceRoot, "library/b", "b-skill", "B skill.");
 
     const result = await addSkillsToLibrary(join(sourceRoot, "library"), {
-      env: { SKILLCASE_HOME: home },
+      env: { SKILLPIN_HOME: home },
       homeDir: "/unused",
     });
 
@@ -110,13 +110,13 @@ describe("add skills to managed library", () => {
   });
 
   it("duplicate candidate names fail and copy nothing", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const sourceRoot = await makeTempRoot("skillcase-add-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const sourceRoot = await makeTempRoot("skillpin-add-source");
     await writeCandidateSkill(sourceRoot, "library/one", "duplicate-skill", "First.");
     await writeCandidateSkill(sourceRoot, "library/two", "duplicate-skill", "Second.");
 
     const result = await addSkillsToLibrary(join(sourceRoot, "library"), {
-      env: { SKILLCASE_HOME: home },
+      env: { SKILLPIN_HOME: home },
       homeDir: "/unused",
     });
 
@@ -127,14 +127,14 @@ describe("add skills to managed library", () => {
   });
 
   it("duplicate managed name fails without replace", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const oldRoot = await makeTempRoot("skillcase-old-source");
-    const newRoot = await makeTempRoot("skillcase-new-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const oldRoot = await makeTempRoot("skillpin-old-source");
+    const newRoot = await makeTempRoot("skillpin-new-source");
     const oldSkill = await writeCandidateSkill(oldRoot, "skill", "same-skill", "Old description.");
     const newSkill = await writeCandidateSkill(newRoot, "skill", "same-skill", "New description.");
-    await addSkillsToLibrary(oldSkill, { env: { SKILLCASE_HOME: home }, homeDir: "/unused" });
+    await addSkillsToLibrary(oldSkill, { env: { SKILLPIN_HOME: home }, homeDir: "/unused" });
 
-    const result = await addSkillsToLibrary(newSkill, { env: { SKILLCASE_HOME: home }, homeDir: "/unused" });
+    const result = await addSkillsToLibrary(newSkill, { env: { SKILLPIN_HOME: home }, homeDir: "/unused" });
 
     expect(result.ok).toBe(false);
     expect(result.errors.map((error) => error.code)).toEqual(["existing-name"]);
@@ -142,15 +142,15 @@ describe("add skills to managed library", () => {
   });
 
   it("replace swaps existing managed skill after validation", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const oldRoot = await makeTempRoot("skillcase-old-source");
-    const newRoot = await makeTempRoot("skillcase-new-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const oldRoot = await makeTempRoot("skillpin-old-source");
+    const newRoot = await makeTempRoot("skillpin-new-source");
     const oldSkill = await writeCandidateSkill(oldRoot, "skill", "same-skill", "Old description.");
     const newSkill = await writeCandidateSkill(newRoot, "skill", "same-skill", "New description.");
-    await addSkillsToLibrary(oldSkill, { env: { SKILLCASE_HOME: home }, homeDir: "/unused" });
+    await addSkillsToLibrary(oldSkill, { env: { SKILLPIN_HOME: home }, homeDir: "/unused" });
 
     const result = await addSkillsToLibrary(newSkill, {
-      env: { SKILLCASE_HOME: home },
+      env: { SKILLPIN_HOME: home },
       homeDir: "/unused",
       replace: true,
     });
@@ -161,17 +161,17 @@ describe("add skills to managed library", () => {
   });
 
   it("replace removes stale old bundled files", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const oldRoot = await makeTempRoot("skillcase-old-source");
-    const newRoot = await makeTempRoot("skillcase-new-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const oldRoot = await makeTempRoot("skillpin-old-source");
+    const newRoot = await makeTempRoot("skillpin-new-source");
     const oldSkill = await writeCandidateSkill(oldRoot, "skill", "same-skill", "Old description.");
     await mkdir(join(oldSkill, "references"), { recursive: true });
     await writeFile(join(oldSkill, "references", "old.md"), "stale");
     const newSkill = await writeCandidateSkill(newRoot, "skill", "same-skill", "New description.");
-    await addSkillsToLibrary(oldSkill, { env: { SKILLCASE_HOME: home }, homeDir: "/unused" });
+    await addSkillsToLibrary(oldSkill, { env: { SKILLPIN_HOME: home }, homeDir: "/unused" });
 
     await addSkillsToLibrary(newSkill, {
-      env: { SKILLCASE_HOME: home },
+      env: { SKILLPIN_HOME: home },
       homeDir: "/unused",
       replace: true,
     });
@@ -180,9 +180,9 @@ describe("add skills to managed library", () => {
   });
 
   it("rejects skills with symlinked bundled files", async () => {
-    const home = await makeTempRoot("skillcase-add-home");
-    const sourceRoot = await makeTempRoot("skillcase-add-source");
-    const externalRoot = await makeTempRoot("skillcase-external-source");
+    const home = await makeTempRoot("skillpin-add-home");
+    const sourceRoot = await makeTempRoot("skillpin-add-source");
+    const externalRoot = await makeTempRoot("skillpin-external-source");
     const skillDir = await writeCandidateSkill(
       sourceRoot,
       "skill",
@@ -194,7 +194,7 @@ describe("add skills to managed library", () => {
     await symlink(join(externalRoot, "outside.md"), join(skillDir, "references", "outside.md"));
 
     const result = await addSkillsToLibrary(skillDir, {
-      env: { SKILLCASE_HOME: home },
+      env: { SKILLPIN_HOME: home },
       homeDir: "/unused",
     });
 

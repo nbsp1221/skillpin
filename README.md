@@ -1,25 +1,27 @@
-# skillcase
+# skillpin
 
-Local trusted Agent Skill routing for LLM agents.
+Pin trusted AI agent skills from GitHub or local folders.
 
-skillcase lets an agent import reviewed local `SKILL.md` directories into a managed library, search only that trusted library, and read selected managed skills directly from the filesystem.
+skillpin is a trusted dependency manager for AI agent skills. It lets you register, pin, audit, and route skills from local directories or GitHub repositories, so agents use only approved skill versions instead of arbitrary instructions discovered at runtime.
+
+AI agent skills are reusable workflow dependencies. Like code dependencies, they need provenance, version pinning, review, and repeatable installation. skillpin gives you a local trust boundary for managing those skills before exposing them to Codex, Claude Code, Cursor, or other agent runtimes.
 
 ## Status
 
-Early PoC. The package is local-first and currently targets Codex workflows.
+Early PoC. The current implementation imports local skill directories and routes agents through the managed library. GitHub source pinning and lockfile workflows are the next product direction.
 
 ## Install
 
 ```bash
-npm install -g skillcase
+npm install -g skillpin
 ```
 
 ## Usage
 
 ```bash
-skillcase init
-skillcase add ./path/to/skill-or-skill-library
-skillcase search "review this React component for render performance" --json
+skillpin init
+skillpin add ./path/to/skill-or-skill-library
+skillpin search "review this React component for render performance" --json
 ```
 
-skillcase does not search the internet or fetch public skills. External discovery is the agent's responsibility; skillcase starts at trusted local import.
+The managed library stores reviewed `SKILL.md` directories and exposes stable JSON output for agent workflows. Search results return managed file paths, so agents can load selected skill instructions directly from the filesystem.

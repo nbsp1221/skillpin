@@ -32,8 +32,8 @@ export async function buildCli(): Promise<void> {
   }
 }
 
-export function runSkillcase(args: readonly string[], home: string): Promise<CliRunResult> {
-  return runProcess("node", ["dist/cli.js", ...args], { SKILLCASE_HOME: home });
+export function runSkillpin(args: readonly string[], home: string): Promise<CliRunResult> {
+  return runProcess("node", ["dist/cli.js", ...args], { SKILLPIN_HOME: home });
 }
 
 function runProcess(command: string, args: readonly string[], env: Readonly<Record<string, string>>): Promise<CliRunResult> {

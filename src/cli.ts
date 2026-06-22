@@ -12,13 +12,13 @@ export function createProgram(): Command {
   const program = new Command();
 
   program
-    .name("skillcase")
-    .description("Local trusted Agent Skill library for LLM agents")
+    .name("skillpin")
+    .description("Trusted dependency manager for AI agent skills")
     .version(packageJson.version);
 
   program
     .command("init")
-    .description("Initialize the local skillcase managed library")
+    .description("Initialize the local skillpin managed skill library")
     .option("--json", "Print stable JSON output")
     .action(async (options) => {
       const result = await initializeLibrary();

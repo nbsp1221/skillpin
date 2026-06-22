@@ -8,8 +8,8 @@ One-off verification belongs in local evidence, not committed tests. Disposable 
 
 ## Evidence-Only Work
 
-- 100-skill corpus validation is evidence-only. It may use `/tmp/skillcase-corpus`, public skill sources, and manual top-match judgments, but the corpus and process assertions are not committed tests.
-- npm package name availability checks such as `npm view skillcase` are release evidence only, not regression tests.
+- 100-skill corpus validation is evidence-only. It may use `/tmp/skillpin-corpus`, public skill sources, and manual top-match judgments, but the corpus and process assertions are not committed tests.
+- npm package name and moniker checks for `skillpin` are release evidence only, not regression tests.
 - tmux transcripts and local QA logs are evidence only unless they become deterministic product checks run through package scripts.
 
 ## Taxonomy
@@ -22,7 +22,7 @@ One-off verification belongs in local evidence, not committed tests. Disposable 
 | `test/unit/discovery.test.ts` | KEEP | Catches broken `SKILL.md` discovery and generated-folder ignore behavior. |
 | `test/unit/frontmatter.test.ts` | KEEP | Catches malformed frontmatter handling and YAML/body parsing regressions. |
 | `test/unit/manual-qa.test.ts` | REMOVE | Process-only document string check for disposable QA; does not test product behavior. Follow-up: Task 2. |
-| `test/unit/paths.test.ts` | KEEP | Catches `$SKILLCASE_HOME` and managed path resolution regressions. |
+| `test/unit/paths.test.ts` | KEEP | Catches `$SKILLPIN_HOME` and managed path resolution regressions. |
 | `test/unit/router-skill.test.ts` | KEEP | Router skill text is a product surface for LLM agents; catches unsupported routing contract changes. |
 | `test/unit/scaffold.test.ts` | REPLACE | Command-name-only assertion is lower value than built CLI metadata/e2e checks. Follow-up: Task 2. |
 | `test/unit/search-output.test.ts` | KEEP | Catches search result body/content leakage and `why_matched` contract regressions. |
@@ -54,7 +54,7 @@ One-off verification belongs in local evidence, not committed tests. Disposable 
 | --- | --- | --- |
 | `build` | KEEP | Builds the shipped CLI artifact through `tsup`. |
 | `dev` | KEEP | Local source-mode development command; not a release/test gate. |
-| `skillcase` | KEEP | Runs the built CLI artifact and exposes the local smoke surface. |
+| `skillpin` | KEEP | Runs the built CLI artifact and exposes the local smoke surface. |
 | `test` | KEEP | Builds the shipped CLI artifact before running the full Vitest suite, including e2e tests that execute `dist/cli.js`. |
 | `test:e2e` | KEEP | Builds first, then runs e2e tests through the shipped `dist/cli.js` artifact. |
 | `test:integration` | KEEP | Runs filesystem integration contracts. |

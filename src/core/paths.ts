@@ -6,7 +6,7 @@ export interface ResolvePathsOptions {
   readonly homeDir?: string;
 }
 
-export interface SkillcasePaths {
+export interface SkillpinPaths {
   readonly home: string;
   readonly skillsDir: string;
   readonly skillDir: (name: string) => string;
@@ -14,11 +14,11 @@ export interface SkillcasePaths {
   readonly sidecarFile: (name: string) => string;
 }
 
-export function resolveSkillcasePaths(options: ResolvePathsOptions = {}): SkillcasePaths {
+export function resolveSkillpinPaths(options: ResolvePathsOptions = {}): SkillpinPaths {
   const env = options.env ?? process.env;
   const baseHome = options.homeDir ?? homedir();
-  const configuredHome = env["SKILLCASE_HOME"]?.trim();
-  const home = resolve(configuredHome && configuredHome.length > 0 ? configuredHome : join(baseHome, ".skillcase"));
+  const configuredHome = env["SKILLPIN_HOME"]?.trim();
+  const home = resolve(configuredHome && configuredHome.length > 0 ? configuredHome : join(baseHome, ".skillpin"));
   const skillsDir = join(home, "skills");
 
   return {
@@ -26,6 +26,6 @@ export function resolveSkillcasePaths(options: ResolvePathsOptions = {}): Skillc
     skillsDir,
     skillDir: (name: string) => join(skillsDir, name),
     skillFile: (name: string) => join(skillsDir, name, "SKILL.md"),
-    sidecarFile: (name: string) => join(skillsDir, name, ".skillcase.json"),
+    sidecarFile: (name: string) => join(skillsDir, name, ".skillpin.json"),
   };
 }

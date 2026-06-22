@@ -1,26 +1,28 @@
 {
-  "name": "skillcase",
+  "name": "skillpin",
   "version": "0.0.1",
-  "description": "Local trusted Agent Skill library for LLM agents",
+  "description": "Trusted dependency manager for AI agent skills",
   "keywords": [
     "agent-skills",
+    "ai-agents",
     "codex",
     "cli",
     "llm",
-    "skills"
+    "skills",
+    "supply-chain"
   ],
-  "homepage": "https://github.com/nbsp1221/skillcase#readme",
+  "homepage": "https://github.com/nbsp1221/skillpin#readme",
   "bugs": {
-    "url": "https://github.com/nbsp1221/skillcase/issues"
+    "url": "https://github.com/nbsp1221/skillpin/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nbsp1221/skillcase.git"
+    "url": "git+https://github.com/nbsp1221/skillpin.git"
   },
   "license": "MIT",
   "type": "module",
   "bin": {
-    "skillcase": "dist/cli.js"
+    "skillpin": "dist/cli.js"
   },
   "files": [
     "dist/cli.js",
@@ -29,7 +31,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsx src/cli.ts",
-    "skillcase": "node dist/cli.js",
+    "skillpin": "node dist/cli.js",
     "test": "pnpm build && vitest run",
     "test:e2e": "pnpm build && vitest run test/e2e",
     "test:integration": "vitest run test/integration",
