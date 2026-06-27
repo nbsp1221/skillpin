@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { Command } from "@commander-js/extra-typings";
 
 import { addCommand, printAddResult } from "./commands/add.js";
@@ -75,6 +77,19 @@ export async function run(argv: string[] = process.argv): Promise<void> {
   await program.parseAsync(argv);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+function isCliEntrypoint(): boolean {
+  const entrypoint = process.argv[1];
+  if (entrypoint === undefined) {
+    return false;
+  }
+
+  try {
+    return realpathSync(entrypoint) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isCliEntrypoint()) {
   await run();
 }

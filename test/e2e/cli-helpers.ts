@@ -36,6 +36,10 @@ export function runSkillpin(args: readonly string[], home: string): Promise<CliR
   return runProcess("node", ["dist/cli.js", ...args], { SKILLPIN_HOME: home });
 }
 
+export function runExecutable(executable: string, args: readonly string[], home: string): Promise<CliRunResult> {
+  return runProcess(executable, args, { SKILLPIN_HOME: home });
+}
+
 function runProcess(command: string, args: readonly string[], env: Readonly<Record<string, string>>): Promise<CliRunResult> {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
